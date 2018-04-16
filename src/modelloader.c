@@ -1,39 +1,17 @@
 #include "modelloader.h"
 
-void readModelDataFromFile() {
+void parseModels() {
 	int i = 0;
-	int j = 0;
-	FILE *file = fopen("Models/ModelDataBase.txt", "r");
-	if (file != NULL)
-	{
-		char line[128];
-		while (fgets(line, sizeof line, file) != NULL)
-		{
-			//newline jel leszedése a sor vegerol
-			size_t len = strlen(line);
-			if (len > 0 && line[len - 1] == '\n') {
-				line[--len] = '\0';
-			}
-			//minden második sor texturanev
-			if ((i % 2) == 0) {
-				modelData[j].objFileName = malloc(strlen(line) + 1);
-				strcpy(modelData[j].objFileName, line);
-				modelData[j].texID = j;
-			}
-			else {
-				modelData[j].textureFileName = malloc(strlen(line) + 1);
-				strcpy(modelData[j].textureFileName, line);
-				j++;
-			}
-			i++;
-		}
-		fclose(file);
-	}
-	else
-	{
-		printf("I/O error: ellenorizd a Models/ModelDataBase.txt fajl elerhetoseget");
-	}
+	char modelnames[NUMBER_OF_MODELS][32] = { "Models/particle.obj", "Models/aderjanos.obj", "Models/szoba.obj", "Models/balta.obj", "Models/menu.obj" };
+	char texturenames[NUMBER_OF_MODELS][32] = { "Textures/particle.png", "Textures/aderjanos.png", "Textures/szoba.png", "Textures/balta.png", "Textures/menu.png" };
 
+	for (i = 0; i < NUMBER_OF_MODELS; i++) {
+		modelData[i].objFileName = malloc(strlen(modelnames[i]));
+		strcpy(modelData[i].objFileName, modelnames[i]);
+		modelData[i].texID = i;
+		modelData[i].textureFileName = malloc(strlen(texturenames[i]));
+		strcpy(modelData[i].textureFileName, texturenames[i]);
+	}
 	for (i = 0; i < NUMBER_OF_MODELS; i++) {
 		load_model(modelData[i].objFileName, &model[i]);
 	}

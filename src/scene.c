@@ -76,35 +76,44 @@ void initialize()
 
 }
 
-void glprint(int x, int y, char *st)
-{
+void showHelp() {
 	glMatrixMode(GL_PROJECTION);
 	glPushMatrix();
 	glLoadIdentity();
-	gluOrtho2D(0.0, SCREEN_WIDTH, 0.0, SCREEN_HEIGHT);
-
+	glOrtho(0.0, SCREEN_WIDTH, 0.0, SCREEN_HEIGHT, -1.0, 1.0);
 	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();
 	glLoadIdentity();
-	glColor3f(0.0, 1.0, 0.0);
 
-	int l, i;
+	glColor3f(1, 1, 1);
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, modelData[4].texID);
 
-	l = strlen(st);
-	glRasterPos2i(x, y);
-	for (i = 0; i < l; i++)
-	{
-		glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, st[i]);
-	}
-	glMatrixMode(GL_MODELVIEW);
+	glBegin(GL_QUADS);
+	glTexCoord2f(0.f, 1.f);
+	glVertex3f(0, 0, 0);
+	glTexCoord2f(0.f, 0.f);
+	glVertex3f(0, SCREEN_HEIGHT, 0);
+	glTexCoord2f(1.f, 0.f);
+	glVertex3f(SCREEN_WIDTH, SCREEN_HEIGHT, 0);
+	glTexCoord2f(1.f, 1.f);
+	glVertex3f(SCREEN_WIDTH, 0, 0);
+	glEnd();
 	glPopMatrix();
-
 	glMatrixMode(GL_PROJECTION);
 	glPopMatrix();
+	glMatrixMode(GL_MODELVIEW);
 }
 
 void draw_scene(double elapsed_time)
 {
+	/*help text*/
+	if (toggleHelp == TRUE)
+	{
+		showHelp();
+		return;
+	}
+
 	/*room*/
 	glBindTexture(GL_TEXTURE_2D, modelData[2].texID);
 	glPushMatrix();
@@ -122,6 +131,7 @@ void draw_scene(double elapsed_time)
 	glRotatef(90, 1, 0, 0);
 	draw_model(&model[1]);
 	glTranslatef(2.0f, -2.0f, 0.0f);
+	
 	glPopMatrix();
 
 	/*axe*/
@@ -180,10 +190,7 @@ void draw_scene(double elapsed_time)
 	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, no_mat);
 	glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, no_mat);
 
-	/*help text*/
-	if (toggleHelp == TRUE)
-	{
-		glprint(20, 20, "Space utes W elore S hatra D jobbra A balra +- fenyero F1 segitseg");
-	}
+	
 
+	
 }

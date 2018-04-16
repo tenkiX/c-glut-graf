@@ -15,7 +15,7 @@ void set_callbacks()
 int main(int argc, char* argv[])
 {
 	glutInit(&argc, argv);
-	readModelDataFromFile();
+	parseModels();
 	glutInitWindowSize(SCREEN_WIDTH, SCREEN_HEIGHT);
 	glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);
 	int window = glutCreateWindow("Grafika beadando");

@@ -1,8 +1,0 @@
-Models/particle.obj
-Textures/particle.png
-Models/aderjanos.obj
-Textures/aderjanos.png
-Models/szoba.obj
-Textures/szoba.png
-Models/balta.obj
-Textures/balta.png

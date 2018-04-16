@@ -6,9 +6,9 @@
 typedef GLubyte Pixel[3]; //r,g,b
 
 /**
-*Parse models and textures from txt file
+*Parse models and textures
 */
-void readModelDataFromFile();
+void parseModels();
 
 /**
 *Initialize textres
