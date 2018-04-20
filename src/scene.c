@@ -105,36 +105,19 @@ void showHelp() {
 	glMatrixMode(GL_MODELVIEW);
 }
 
-void draw_scene(double elapsed_time)
+void drawObjectAbsolute(int modelNumber, float x, float y, float z, float scale) 
 {
-	/*help text*/
-	if (toggleHelp == TRUE)
-	{
-		showHelp();
-		return;
-	}
-
-	/*room*/
-	glBindTexture(GL_TEXTURE_2D, modelData[2].texID);
+	glBindTexture(GL_TEXTURE_2D, modelData[modelNumber].texID);
 	glPushMatrix();
-	glScalef(1.0f, 1.0f, 1.0f);
-	glTranslatef(0.0f, 0.0f, 0.0f);
+	glScalef(scale, scale, scale);
+	glTranslatef(x, y, z);
 	glRotatef(90, 1, 0, 0);
-	draw_model(&model[2]);
+	draw_model(&model[modelNumber]);
+	glTranslatef(-x, -y, -z);
 	glPopMatrix();
+}
 
-	/*Mr Janos Ader*/
-	glBindTexture(GL_TEXTURE_2D, modelData[1].texID);
-	glPushMatrix();
-	glScalef(1.0f, 1.0f, 1.0f);
-	glTranslatef(-2.0f, 2.0f, 0.0f);
-	glRotatef(90, 1, 0, 0);
-	draw_model(&model[1]);
-	glTranslatef(2.0f, -2.0f, 0.0f);
-	
-	glPopMatrix();
-
-	/*axe*/
+void drawAnimatedAxe(double elapsed_time) {
 	glBindTexture(GL_TEXTURE_2D, modelData[3].texID);
 	glPushMatrix();
 	glTranslatef(camera.position.x, camera.position.y, camera.position.z);
@@ -154,18 +137,27 @@ void draw_scene(double elapsed_time)
 	glRotatef(attackTimer * 45, 1, 0.2, 0);
 	draw_model(&model[3]);
 	glPopMatrix();
+}
 
-	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, material1);
-	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, material2);
-	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, full_mat);
-	glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, material_shininess);
+void draw_scene(double elapsed_time)
+{
+	/*help text*/
+	if (toggleHelp == TRUE)
+	{
+		showHelp();
+		return;
+	}
+
+	/*room*/
+	drawObjectAbsolute(2, 0, 0, 0, 1);
+
+	/*Mr Janos Ader*/
+	drawObjectAbsolute(1, -2, 2, 0, 1);
+	
+	/*axe*/
+	drawAnimatedAxe(elapsed_time);
 
 	/*particles*/
-	glBindTexture(GL_TEXTURE_2D, modelData[0].texID);
-	glPushMatrix();
-	glScalef(0.35f, 0.35f, 0.35f);
-	glRotatef(90, 1, 0, 0);
-	glColor3f(1, 1, 1);
 	int i;
 	/*we want every second particle to have different colour*/ 
 	for (i = 0; i < MAX_PARTICLES; i++) {
@@ -177,20 +169,14 @@ void draw_scene(double elapsed_time)
 			glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, material2);
 			glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, material2);
 		}
-		particles[i].y += PARTICLES_SPEED * elapsed_time; 
-		if (particles[i].y>PARTICLES_LIFE) { particles[i].y = 0; }
-		glTranslatef(particles[i].x, particles[i].y, particles[i].z);
-		draw_model(&model[0]);
-		glTranslatef(-particles[i].x, -particles[i].y, -particles[i].z);
+		particles[i].z += PARTICLES_SPEED * elapsed_time; 
+		if (particles[i].z>PARTICLES_LIFE) { particles[i].z = 0; }
+		drawObjectAbsolute(0, particles[i].x, particles[i].y, particles[i].z, 0.35f);
 	}
 
-	glPopMatrix();
 	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, full_mat);
 	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, full_mat);
 	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, no_mat);
 	glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, no_mat);
 
-	
-
-	
 }

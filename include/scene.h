@@ -32,7 +32,12 @@ void showHelp();
 /* Sets the power of light by the given value */
 void set_lightings(float lightPower);
 
-/* Draws the scene: binds textures, places models */
+/* Draws the scene */
 void draw_scene(double elapsed_time);
 
+/* Draws an object to absolute coordinates */
+void drawObjectAbsolute(int modelNumber, float x, float y, float z, float scale);
+
+/*Handles axe's animation and draws it*/
+void drawAnimatedAxe();
 #endif /* SCENE_H */
